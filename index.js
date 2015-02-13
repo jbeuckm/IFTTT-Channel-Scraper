@@ -79,6 +79,24 @@ function loadChannelsList() {
 }
 
 
+function outputCSV(data) {
+    
+    console.log('"channel","type","title"');
+    
+    for (var i=0, l=data.length; i<l; i++) {
+        
+        var channel = data[i];
+        
+        for (var j=0, m=channel.triggers.length; j<m; j++) {
+            console.log('"'+channel.channel+'","trigger","'+channel.triggers[j]+'"');
+        }
+        
+        for (var j=0, m=channel.actions.length; j<m; j++) {
+            console.log('"'+channel.channel+'","action","'+channel.actions[j]+'"');
+        }
+    }
+}
+
 loadChannelsList().then(function(d) {
 
     var paths = getChannelPaths(d);
@@ -90,7 +108,10 @@ loadChannelsList().then(function(d) {
     }
                       
     Q.all(promises).then(function(results){
+            
         console.log(results);
+//        outputCSV(results);
+
     });
 
 });
