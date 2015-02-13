@@ -1,0 +1,16 @@
+{
+  "name": "ifttt_scraper",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "q": "~1.1.2",
+    "cheerio": "~0.18.0",
+    "request": "~2.53.0"
+  }
+}
