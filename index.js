@@ -3,18 +3,65 @@ var cheerio = require('cheerio');
 var request = require('request');
 
 
-function parseChannels(data) {
+function getTriggers($) {
+    
+    var triggers = [];
+    
+    $(".trigger-list_item_name").each(function(i, el){
+        triggers.push($(this).text().trim());
+    });
+    
+    return triggers;
+}
+
+function getActions($) {
+    
+    var actions = [];
+    
+    $(".action-list_item_name").each(function(i, el){
+        actions.push($(this).text().trim());
+    });
+    
+    return actions;
+}
+
+function loadChannel(path) {
+
+    var def = Q.defer();
+
+    request('https://ifttt.com/channels'+path, function (error, response, html) {
+        if (!error && response.statusCode == 200) {
+            
+            $ = cheerio.load(html);
+
+            def.resolve({
+                channel: path.replace('/',''),
+                triggers: getTriggers($),
+                actions: getActions($)
+            });
+            
+        } else {
+            def.reject(error);
+        }
+    });
+
+    return def.promise;
+}
+    
+
+function getChannelPaths(data) {
 
     $ = cheerio.load(data);
     
-    $(".channel_title").each(function (i, el) {
-        console.log($(this).text());
+    var paths = [];
+    
+    $(".channel").each(function (i, el) {
+        var path = $(this).find('a').attr('href');
+        paths.push(path);
     });
-
+    
+    return paths;
 }
-
-loadChannelsList().then(parseChannels);
-
 
 function loadChannelsList() {
 
@@ -30,3 +77,22 @@ function loadChannelsList() {
     return def.promise;
 
 }
+
+
+loadChannelsList().then(function(d) {
+
+    var paths = getChannelPaths(d);
+    
+    var promises = [];
+    
+    for (var i=0, l=paths.length; i<l; i++) {
+        promises.push(loadChannel(paths[i]));
+    }
+                      
+    Q.all(promises).then(function(results){
+        console.log(results);
+    });
+
+});
+
+
