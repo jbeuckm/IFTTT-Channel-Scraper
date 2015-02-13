@@ -1,13 +1,13 @@
 {
   "name": "ifttt_scraper",
-  "version": "0.0.0",
-  "description": "",
+  "version": "0.0.1",
+  "description": "Scrapes IFTTT to find all triggers and actions for each channel.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Joe Beuckman",
+  "license": "Don't read software licenses. Don't write software licenses.",
   "dependencies": {
     "q": "~1.1.2",
     "cheerio": "~0.18.0",
